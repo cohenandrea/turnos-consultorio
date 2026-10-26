@@ -41,7 +41,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       <aside className="border-b border-line bg-white lg:sticky lg:top-0 lg:h-dvh lg:w-64 lg:shrink-0 lg:overflow-y-auto lg:border-r lg:border-b-0">
         <div className="flex items-center justify-between px-4 py-4 lg:block">
           <Link href="/admin" className="block">
-            <p className="font-display text-lg leading-tight font-semibold">{s.professionalName}</p>
+            <p className="text-lg leading-tight font-extrabold text-accent">{s.professionalName}</p>
             <p className="text-xs text-muted">Panel del consultorio</p>
           </Link>
         </div>

@@ -31,7 +31,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <main className="flex min-h-dvh items-center justify-center px-4">
       <form action={loginAction} className="card w-full max-w-sm space-y-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold">Panel del consultorio</h1>
+          <h1 className="font-display text-2xl font-extrabold text-accent">Panel del consultorio</h1>
           <p className="text-sm text-muted">Acceso exclusivo para la profesional y su equipo.</p>
         </div>
         {error && <p className="alert-error">{error}</p>}

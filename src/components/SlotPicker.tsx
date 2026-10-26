@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/client-api";
 import type { SerializedSlot } from "@/lib/services/availability-service";
-import { CalendarIcon, ChevronLeft, ChevronRight, ClockIcon } from "./icons";
+import { CalendarIcon, ChevronLeft, ChevronRight, ClockIcon, PinIcon } from "./icons";
 
 type SuggestResponse = { suggestions: SerializedSlot[]; hasAny: boolean; minMonth: string; maxMonth: string };
 type MonthResponse = { days: Record<string, SerializedSlot[]>; minMonth: string; maxMonth: string };
@@ -143,9 +143,14 @@ export function SlotPicker({
                     </span>
                     <span className="flex-1">
                       <span className="block text-[17px] font-semibold">{s.dateLabel}</span>
-                      <span className="flex items-center gap-1.5 text-muted">
-                        <ClockIcon className="h-4 w-4" /> {s.time} hs.{s.locationName ? ` · ${s.locationName}` : ""}
+                      <span className="flex items-center gap-1.5 text-[17px] font-bold text-accent">
+                        <ClockIcon className="h-4 w-4" /> {s.time} hs.
                       </span>
+                      {s.locationName && (
+                        <span className="flex items-center gap-1.5 text-sm text-muted">
+                          <PinIcon className="h-4 w-4" /> {s.locationName}
+                        </span>
+                      )}
                     </span>
                     <span className={`rounded-xl px-4 py-2 text-sm font-semibold ${selected ? "bg-brand text-on-brand" : "bg-soft text-brand"}`}>
                       {selected ? "Elegido" : "Elegir"}

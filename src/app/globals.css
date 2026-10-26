@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: var(--brand, #4a6b5c);
+  --color-brand: var(--brand, #b5536b);
   --color-on-brand: var(--on-brand, #ffffff);
-  --color-accent: var(--accent, #c98b6b);
-  --color-ink: #2a2723;
-  --color-muted: #625b53;
-  --color-line: #e7e1d8;
-  --color-paper: #faf8f5;
-  --color-soft: #f2eee8;
+  --color-accent: var(--accent, #7a2e45);
+  --color-ink: #33262b;
+  --color-muted: #6f5d63;
+  --color-line: #eedfdf;
+  --color-paper: #fbf7f5;
+  --color-soft: #f7ecec;
   --color-danger: #b42318;
   --color-ok: #2f6b45;
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-heading), Georgia, serif;
+  --font-display: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -30,15 +30,15 @@ body {
 }
 
 @utility btn {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-semibold transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-bold transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 @utility btn-primary {
-    @apply btn bg-brand text-on-brand shadow-sm hover:brightness-110;
+    @apply btn bg-brand text-on-brand shadow-[0_6px_18px_-6px_color-mix(in_srgb,var(--color-brand)_55%,transparent)] hover:brightness-105;
 }
 
 @utility btn-secondary {
-    @apply btn border border-line bg-white text-ink hover:bg-soft;
+    @apply btn border border-brand/25 bg-white text-accent hover:border-brand/60 hover:bg-soft;
 }
 
 @utility btn-ghost {
@@ -50,7 +50,7 @@ body {
 }
 
 @utility card {
-    @apply rounded-3xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:p-6;
+    @apply rounded-3xl border border-line bg-white p-5 shadow-[0_8px_30px_-12px_rgba(122,46,69,0.12)] sm:p-6;
 }
 
 @utility label {

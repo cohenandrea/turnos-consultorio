@@ -11,7 +11,7 @@ export default async function Privacidad() {
   return (
     <PublicShell config={config}>
       <article className="space-y-4 text-[16px] leading-relaxed [&_h2]:mt-6 [&_h2]:text-xl [&_h2]:font-semibold">
-        <h1 className="font-display text-[28px] font-semibold">Política de privacidad</h1>
+        <h1 className="font-display text-[26px] font-extrabold text-accent">Política de privacidad</h1>
         <p>
           Esta política explica cómo se tratan los datos personales que ingresás al reservar un turno, conforme a la Ley N° 25.326 de
           Protección de los Datos Personales y al deber de confidencialidad profesional.

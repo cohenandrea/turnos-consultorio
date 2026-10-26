@@ -15,10 +15,10 @@ export default async function ManagePage({ params }: { params: Promise<{ token: 
   return (
     <PublicShell config={config}>
       {appt ? (
-        <ManageView token={token} initial={await appointmentView(appt)} waitlistEnabled={config.waitlistEnabled} />
+        <ManageView token={token} initial={await appointmentView(appt)} waitlistEnabled={config.waitlistEnabled} prescription={config.prescription} />
       ) : (
         <div className="card space-y-4 text-center">
-          <h1 className="font-display text-2xl font-semibold">Este enlace no es válido</h1>
+          <h1 className="font-display text-2xl font-extrabold text-accent">Este enlace no es válido</h1>
           <p className="text-muted">Puede que haya vencido o que se haya generado uno nuevo. Podés pedir que te lo reenviemos.</p>
           <Link href="/mi-turno" className="btn-primary w-full">
             Recuperar mi enlace

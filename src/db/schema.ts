@@ -53,6 +53,9 @@ export const settings = pgTable("settings", {
   // Privacidad
   dataControllerName: text("data_controller_name"),
   privacyExtra: text("privacy_extra"),
+  // Registro para recetas y órdenes electrónicas (opcional)
+  prescriptionUrl: text("prescription_url"),
+  prescriptionNote: text("prescription_note"),
   lastCronAt: ts("last_cron_at"),
   updatedAt: updatedAt(),
 });

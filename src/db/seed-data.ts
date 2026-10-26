@@ -1,42 +1,59 @@
 /**
- * Datos iniciales EDITABLES desde el panel. Las coberturas son ejemplos,
- * no afirmaciones sobre convenios vigentes.
+ * Datos iniciales del consultorio. Todo es EDITABLE desde el panel.
  */
 export const seedSettings = {
   id: 1,
-  professionalName: "Dra. Nombre Apellido",
-  specialty: "Especialidad médica",
-  bio: "Atención personalizada, con tiempo para escucharte.",
-  attentionInfo: "Atención con turno previo. Llegá 10 minutos antes y traé tu credencial y DNI.",
+  professionalName: "Dra. Andrea Cohen",
+  specialty: "Ginecología y Obstetricia",
+  bio: "Médica especialista en Ginecología y Obstetricia. Acompañamiento cercano en cada etapa de tu vida.",
+  attentionInfo: "Atención con turno previo. Te pedimos llegar 10 minutos antes con tu DNI y credencial de tu cobertura.",
   whatsappContact: null,
-  contactEmail: null,
+  contactEmail: "ginecobyandrea@gmail.com",
+  primaryColor: "#B5536B",
+  accentColor: "#7A2E45",
+  slotIntervalMinutes: 15,
+  dataControllerName: "Dra. Andrea Cohen",
+  prescriptionUrl: "https://app.rcta.me/patients/a9cde68b831e58bd4e41961e2143aadb3e74b9a1",
+  prescriptionNote: "Para poder recibir recetas y órdenes electrónicas de la Dra. Cohen es necesario completar este formulario.",
 };
 
+/** Sedes con su horario semanal (1 = lunes … 7 = domingo). Las horas de fin son el fin de la atención. */
 export const seedLocations = [
-  { name: "Consultorio principal", address: "Av. Ejemplo 1234, 5° B, CABA", mapsUrl: null, notes: null, sortOrder: 0 },
+  {
+    name: "Consultorio Palermo",
+    address: "Av. Raúl Scalabrini Ortiz 2356, 6° F, CABA",
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Av.+Scalabrini+Ortiz+2356,+CABA",
+    notes: "6° piso, departamento F",
+    sortOrder: 0,
+    rules: [
+      { weekday: 1, startTime: "15:00", endTime: "18:45" },
+      { weekday: 3, startTime: "14:00", endTime: "18:00" },
+    ],
+  },
+  {
+    name: "Consultorio Caballito",
+    address: "Riglos 188, 3° piso, CABA",
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Riglos+188,+CABA",
+    notes: "3° piso",
+    sortOrder: 1,
+    rules: [{ weekday: 4, startTime: "14:00", endTime: "18:30" }],
+  },
 ];
 
 export const seedConsultationTypes = [
-  { slug: "primera-vez", name: "Primera consulta", description: "Si es la primera vez que te atendés conmigo.", durationMinutes: 40, sortOrder: 0 },
-  { slug: "control", name: "Control", description: "Seguimiento o control periódico.", durationMinutes: 30, sortOrder: 1 },
+  { slug: "consulta-ginecologica", name: "Consulta ginecológica", description: "Consulta ginecológica con la Dra. Andrea Cohen.", durationMinutes: 15, sortOrder: 0 },
 ];
 
 export const seedCoverages = [
   { slug: "osde", name: "OSDE", kind: "prepaga" },
   { slug: "swiss-medical", name: "Swiss Medical", kind: "prepaga" },
-  { slug: "galeno", name: "Galeno", kind: "prepaga" },
   { slug: "medicus", name: "Medicus", kind: "prepaga" },
+  { slug: "sancor-salud", name: "Sancor Salud", kind: "prepaga" },
+  { slug: "avalian", name: "Avalian", kind: "prepaga" },
+  { slug: "hominis", name: "Hominis", kind: "prepaga" },
   { slug: "omint", name: "Omint", kind: "prepaga" },
-  { slug: "accord-salud", name: "Accord Salud", kind: "obra_social" },
-  { slug: "otras", name: "Otra cobertura", kind: "otra", instructions: "Indicá tu cobertura en el número de afiliada. Te confirmaremos si la aceptamos." },
-  { slug: "particular", name: "Particular (sin cobertura)", kind: "particular", requiresMemberNumber: false },
+  { slug: "particular", name: "Particular", kind: "particular", requiresMemberNumber: false },
 ].map((c, i) => ({ requiresMemberNumber: true, instructions: null, ...c, sortOrder: i }));
-
-/** Lunes a viernes 9 a 13 y 15 a 19 (el corte 13–15 es el descanso). */
-export const seedScheduleRules = [1, 2, 3, 4, 5].flatMap((weekday) => [
-  { weekday, startTime: "09:00", endTime: "13:00" },
-  { weekday, startTime: "15:00", endTime: "19:00" },
-]);
 
 export const TEMPLATE_KEYS = ["confirmation", "reminder_48", "reminder_24", "reschedule", "cancellation", "waitlist_offer", "otp"] as const;
 export type TemplateKey = (typeof TEMPLATE_KEYS)[number];

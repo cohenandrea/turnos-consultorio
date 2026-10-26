@@ -11,7 +11,7 @@ export default async function MiTurno() {
   const config = await getPublicConfig();
   return (
     <PublicShell config={config}>
-      <h1 className="font-display text-[28px] font-semibold">Consultar, cancelar o reprogramar</h1>
+      <h1 className="font-display text-[26px] font-extrabold text-accent">Consultar, cancelar o reprogramar</h1>
       <p className="mt-2 text-muted">
         Cuando reservaste te enviamos un enlace personal para gestionar tu turno. Buscalo en tu WhatsApp o tu correo.
       </p>

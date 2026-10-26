@@ -2,6 +2,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { consultationTypes, coverages, locations, settings, scheduleRules, type Coverage, type ConsultationType } from "@/db/schema";
 import { AppError } from "@/lib/errors";
+import { WEEKDAYS } from "@/lib/time";
 
 export async function getSettings() {
   const [s] = await db.select().from(settings).where(eq(settings.id, 1));
@@ -54,7 +55,12 @@ export async function resolveCoverageAndType(coverageId: number, consultationTyp
 
 /** Datos públicos para la página de pacientes (sin nada sensible). */
 export async function getPublicConfig() {
-  const [s, locs, covs, types] = await Promise.all([getSettings(), getActiveLocations(), getActiveCoverages(), getActiveTypes()]);
+  const [s, locs, covs, types, rules] = await Promise.all([getSettings(), getActiveLocations(), getActiveCoverages(), getActiveTypes(), getActiveRules()]);
+  const hoursFor = (locationId: number) =>
+    rules
+      .filter((r) => r.locationId === locationId)
+      .sort((a, b) => a.weekday - b.weekday || a.startTime.localeCompare(b.startTime))
+      .map((r) => ({ day: WEEKDAYS[r.weekday - 1], from: r.startTime, to: r.endTime }));
   return {
     professionalName: s.professionalName,
     specialty: s.specialty,
@@ -62,12 +68,14 @@ export async function getPublicConfig() {
     photoUrl: s.photoUrl,
     attentionInfo: s.attentionInfo,
     whatsappContact: s.whatsappContact,
+    contactEmail: s.contactEmail,
     primaryColor: s.primaryColor,
     accentColor: s.accentColor,
     timezone: s.timezone,
     waitlistEnabled: s.waitlistEnabled,
     cancelLimitHours: s.cancelLimitHours,
-    locations: locs.map((l) => ({ id: l.id, name: l.name, address: l.address, mapsUrl: l.mapsUrl, notes: l.notes })),
+    prescription: s.prescriptionUrl ? { url: s.prescriptionUrl, note: s.prescriptionNote } : null,
+    locations: locs.map((l) => ({ id: l.id, name: l.name, address: l.address, mapsUrl: l.mapsUrl, notes: l.notes, hours: hoursFor(l.id) })),
     coverages: covs.map((c) => ({
       id: c.id,
       slug: c.slug,

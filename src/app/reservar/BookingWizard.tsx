@@ -9,6 +9,7 @@ import type { PublicConfig } from "@/lib/services/config";
 import type { SerializedSlot } from "@/lib/services/availability-service";
 import type { AppointmentView } from "@/lib/services/views";
 import { WaitlistForm } from "./WaitlistForm";
+import { PrescriptionNotice } from "@/components/PrescriptionNotice";
 
 type Step = "coverage" | "slot" | "details" | "summary" | "done";
 type Form = {
@@ -134,10 +135,10 @@ export function BookingWizard({
     if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
-  if (step === "done" && result) return <Done result={result} />;
+  if (step === "done" && result) return <Done result={result} prescription={config.prescription} />;
 
   return (
-    <div ref={topRef} className="scroll-mt-4">
+    <div ref={topRef} className="scroll-mt-24">
       {/* Progreso */}
       <ol className="mb-6 grid grid-cols-3 gap-2" aria-label="Pasos de la reserva">
         {["Cobertura", "Turno", "Tus datos"].map((label, i) => (
@@ -153,7 +154,7 @@ export function BookingWizard({
       {step === "coverage" && (
         <section className="space-y-6">
           <div>
-            <h1 className="font-display text-[28px] leading-tight font-semibold">¿Con qué cobertura te atendés?</h1>
+            <h1 className="font-display text-[26px] leading-tight font-extrabold text-accent">¿Con qué cobertura te atendés?</h1>
             <p className="mt-1 text-muted">Elegí tu prepaga u obra social, o “Particular”.</p>
           </div>
           {config.coverages.length > 8 && (
@@ -212,7 +213,7 @@ export function BookingWizard({
         <section className="space-y-5">
           <BackButton onClick={() => setStep("coverage")} />
           <div>
-            <h1 className="font-display text-[28px] leading-tight font-semibold">Seleccioná tu turno</h1>
+            <h1 className="font-display text-[26px] leading-tight font-extrabold text-accent">Seleccioná tu turno</h1>
             <p className="mt-1 text-muted">
               {coverage.name} · {type.name}
             </p>
@@ -245,7 +246,7 @@ export function BookingWizard({
         <section className="space-y-5">
           <BackButton onClick={() => setStep("slot")} />
           <div>
-            <h1 className="font-display text-[28px] leading-tight font-semibold">Completá tus datos</h1>
+            <h1 className="font-display text-[26px] leading-tight font-extrabold text-accent">Completá tus datos</h1>
             <p className="mt-1 flex items-center gap-1.5 text-muted">
               <CalendarIcon className="h-4 w-4" /> {slot.dateLabel} · {slot.time} hs.
             </p>
@@ -325,7 +326,7 @@ export function BookingWizard({
       {step === "summary" && slot && coverage && type && (
         <section className="space-y-5">
           <BackButton onClick={() => setStep("details")} />
-          <h1 className="font-display text-[28px] leading-tight font-semibold">Revisá y confirmá</h1>
+          <h1 className="font-display text-[26px] leading-tight font-extrabold text-accent">Revisá y confirmá</h1>
           <div className="card space-y-4">
             <Row icon={<UserIcon />} label="Profesional" value={config.professionalName} sub={config.specialty} />
             <Row icon={<CalendarIcon />} label="Fecha" value={slot.dateLabel} />
@@ -523,7 +524,7 @@ function googleCalendarUrl(a: AppointmentView) {
   return `https://calendar.google.com/calendar/render?${p}`;
 }
 
-function Done({ result }: { result: { token: string; appointment: AppointmentView } }) {
+function Done({ result, prescription }: { result: { token: string; appointment: AppointmentView }; prescription: PublicConfig["prescription"] }) {
   const a = result.appointment;
   return (
     <section className="space-y-6 text-center">
@@ -531,7 +532,7 @@ function Done({ result }: { result: { token: string; appointment: AppointmentVie
         <CheckIcon className="h-10 w-10" />
       </div>
       <div>
-        <h1 className="font-display text-[30px] leading-tight font-semibold">¡Tu turno está confirmado!</h1>
+        <h1 className="font-display text-[28px] leading-tight font-extrabold text-accent">¡Tu turno está confirmado!</h1>
         <p className="mt-2 text-lg text-muted">Te enviaremos recordatorios para que no te olvides.</p>
       </div>
       <div className="card space-y-3 text-left">
@@ -550,6 +551,7 @@ function Done({ result }: { result: { token: string; appointment: AppointmentVie
         </Link>
       </div>
       <p className="text-[15px] text-muted">También te enviamos este enlace para que puedas gestionar tu turno cuando lo necesites.</p>
+      <PrescriptionNotice prescription={prescription} />
     </section>
   );
 }

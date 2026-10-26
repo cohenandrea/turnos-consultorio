@@ -8,10 +8,22 @@ import { CalendarIcon, CardIcon, CheckIcon, ClockIcon, PinIcon, UserIcon, WhatsA
 import { apiFetch, ApiError } from "@/lib/client-api";
 import type { SerializedSlot } from "@/lib/services/availability-service";
 import type { AppointmentView } from "@/lib/services/views";
+import type { PublicConfig } from "@/lib/services/config";
+import { PrescriptionNotice } from "@/components/PrescriptionNotice";
 
 type Mode = "view" | "reschedule" | "cancel" | "cancelled";
 
-export function ManageView({ token, initial, waitlistEnabled }: { token: string; initial: AppointmentView; waitlistEnabled: boolean }) {
+export function ManageView({
+  token,
+  initial,
+  waitlistEnabled,
+  prescription,
+}: {
+  token: string;
+  initial: AppointmentView;
+  waitlistEnabled: boolean;
+  prescription: PublicConfig["prescription"];
+}) {
   const router = useRouter();
   const [a, setA] = useState(initial);
   const [mode, setMode] = useState<Mode>(initial.status === "cancelled" ? "cancelled" : "view");
@@ -53,7 +65,7 @@ export function ManageView({ token, initial, waitlistEnabled }: { token: string;
   if (a.isPast && a.status !== "cancelled")
     return (
       <div className="space-y-5">
-        <h1 className="font-display text-[28px] font-semibold">Este turno ya pasó</h1>
+        <h1 className="font-display text-[26px] font-extrabold text-accent">Este turno ya pasó</h1>
         {Details}
         <Link href="/reservar" className="btn-primary w-full">
           Reservar un nuevo turno
@@ -66,7 +78,7 @@ export function ManageView({ token, initial, waitlistEnabled }: { token: string;
       <div className="space-y-6">
         <div className="space-y-2">
           {notice ? <div className="alert-ok">{notice}</div> : null}
-          <h1 className="font-display text-[28px] font-semibold">Tu turno fue cancelado</h1>
+          <h1 className="font-display text-[26px] font-extrabold text-accent">Tu turno fue cancelado</h1>
           <p className="text-muted">
             El turno del {a.dateLabel.toLowerCase()} a las {a.time} hs. quedó liberado.
           </p>
@@ -102,7 +114,7 @@ export function ManageView({ token, initial, waitlistEnabled }: { token: string;
       )}
       <div>
         <p className="text-muted">Hola, {a.firstName}</p>
-        <h1 className="font-display text-[28px] font-semibold">Tu próximo turno</h1>
+        <h1 className="font-display text-[26px] font-extrabold text-accent">Tu próximo turno</h1>
       </div>
       {Details}
       {a.attendanceConfirmed && (
@@ -205,6 +217,7 @@ export function ManageView({ token, initial, waitlistEnabled }: { token: string;
         </section>
       )}
 
+      <PrescriptionNotice prescription={prescription} />
       {wa && (
         <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="btn-ghost w-full">
           <WhatsAppIcon /> ¿Necesitás ayuda? Escribinos

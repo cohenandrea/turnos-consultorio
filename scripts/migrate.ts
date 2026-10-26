@@ -12,7 +12,6 @@ import {
   seedLocations,
   seedConsultationTypes,
   seedCoverages,
-  seedScheduleRules,
   seedTemplates,
 } from "../src/db/seed-data";
 
@@ -31,10 +30,12 @@ async function seed(db: ReturnType<typeof drizzle<typeof schema>>) {
   const existing = await db.select().from(schema.settings).where(eq(schema.settings.id, 1));
   if (existing.length === 0) {
     await db.insert(schema.settings).values(seedSettings);
-    const [loc] = await db.insert(schema.locations).values(seedLocations).returning();
+    for (const { rules, ...location } of seedLocations) {
+      const [loc] = await db.insert(schema.locations).values(location).returning();
+      await db.insert(schema.scheduleRules).values(rules.map((r) => ({ ...r, locationId: loc.id })));
+    }
     await db.insert(schema.consultationTypes).values(seedConsultationTypes);
     await db.insert(schema.coverages).values(seedCoverages);
-    await db.insert(schema.scheduleRules).values(seedScheduleRules.map((r) => ({ ...r, locationId: loc.id })));
     await db.insert(schema.googleIntegration).values({ id: 1 });
     console.log("✓ Datos iniciales cargados");
   }

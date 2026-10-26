@@ -414,6 +414,8 @@ export async function saveProfile(f: FormData) {
     const photoUrl = str(f, "photoUrl") || null;
     if (photoUrl && !/^https:\/\//.test(photoUrl)) throw new AppError("INVALID_INPUT", "La foto debe ser un enlace https://");
     const wa = str(f, "whatsappContact");
+    const prescriptionUrl = str(f, "prescriptionUrl") || null;
+    if (prescriptionUrl && !/^https:\/\//.test(prescriptionUrl)) throw new AppError("INVALID_INPUT", "El enlace de recetas debe empezar con https://");
     await db
       .update(settings)
       .set({
@@ -429,6 +431,8 @@ export async function saveProfile(f: FormData) {
         waitlistEnabled: bool(f, "waitlistEnabled"),
         dataControllerName: str(f, "dataControllerName") || null,
         privacyExtra: str(f, "privacyExtra") || null,
+        prescriptionUrl,
+        prescriptionNote: str(f, "prescriptionNote") || null,
         updatedAt: new Date(),
       })
       .where(eq(settings.id, 1));

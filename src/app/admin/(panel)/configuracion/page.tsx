@@ -30,6 +30,12 @@ export default async function Configuracion({ searchParams }: { searchParams: Pr
           </div>
           <p className="mt-2 text-sm text-muted">El texto de los botones se ajusta solo para mantener buen contraste.</p>
         </Section>
+        <Section title="Recetas y órdenes electrónicas" description="Se muestra en la página principal, al confirmar el turno y en la página de gestión de la paciente. Dejá el enlace vacío para ocultarlo.">
+          <div className="grid gap-4">
+            <F label="Enlace del formulario"><input className="input" name="prescriptionUrl" defaultValue={s.prescriptionUrl ?? ""} placeholder="https://…" /></F>
+            <F label="Texto"><textarea className="input min-h-16" name="prescriptionNote" defaultValue={s.prescriptionNote ?? ""} /></F>
+          </div>
+        </Section>
         <Section title="Lista de espera">
           <Toggle name="waitlistEnabled" defaultChecked={s.waitlistEnabled} label="Permitir que las pacientes se anoten para recibir avisos de turnos liberados" />
         </Section>
