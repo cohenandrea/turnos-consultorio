@@ -1,6 +1,12 @@
 /** Lectura centralizada de variables de entorno (solo servidor). */
 export const env = {
-  appUrl: () => (process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, ""),
+  appUrl: () =>
+    (
+      process.env.APP_URL ??
+      process.env.NEXT_PUBLIC_APP_URL ??
+      // Vercel informa el dominio de producción automáticamente
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000")
+    ).replace(/\/$/, ""),
   sessionSecret: () => {
     const s = process.env.SESSION_SECRET;
     if (!s || s.length < 32) throw new Error("SESSION_SECRET debe tener al menos 32 caracteres");

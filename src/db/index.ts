@@ -8,7 +8,8 @@ export type Tx = Parameters<Parameters<DB["transaction"]>[0]>[0];
 const globalForDb = globalThis as unknown as { __db?: DB; __sql?: postgres.Sql };
 
 function create(): DB {
-  const url = process.env.DATABASE_URL;
+  // DATABASE_URL, o las que crean automáticamente las integraciones de Neon/Supabase en Vercel
+  const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
   if (!url) throw new Error("Falta la variable de entorno DATABASE_URL");
   const sql = postgres(url, {
     max: Number(process.env.DB_POOL_MAX ?? 5),
