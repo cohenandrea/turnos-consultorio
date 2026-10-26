@@ -1,0 +1,25 @@
+# Copia de seguridad diaria de la base de datos, CIFRADA, guardada 30 días como artefacto de GitHub.
+# Secrets necesarios: DATABASE_URL_DIRECT (conexión directa, puerto 5432) y BACKUP_PASSPHRASE.
+# Restaurar: gpg -d backup.sql.gz.gpg | gunzip | psql "$DATABASE_URL"
+name: Copia de seguridad
+on:
+  schedule:
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instalar cliente de PostgreSQL
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+      - name: Volcar y cifrar
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_DIRECT }}
+          PASS: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          pg_dump --no-owner --no-privileges "$DATABASE_URL" | gzip | gpg --batch --yes --pinentry-mode loopback --passphrase "$PASS" -c -o backup.sql.gz.gpg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backup-${{ github.run_id }}
+          path: backup.sql.gz.gpg
+          retention-days: 30

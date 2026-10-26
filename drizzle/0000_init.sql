@@ -209,7 +209,7 @@ CREATE TABLE "settings" (
 	"whatsapp_contact" text,
 	"contact_email" text,
 	"attention_info" text,
-	"primary_color" text DEFAULT '#5b7f6e' NOT NULL,
+	"primary_color" text DEFAULT '#4a6b5c' NOT NULL,
 	"accent_color" text DEFAULT '#c98b6b' NOT NULL,
 	"timezone" text DEFAULT 'America/Argentina/Buenos_Aires' NOT NULL,
 	"slot_interval_minutes" integer DEFAULT 30 NOT NULL,

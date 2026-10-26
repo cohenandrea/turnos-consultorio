@@ -1,0 +1,16 @@
+# Ejecuta la tarea programada cada 10 minutos (recordatorios, reintentos y sincronización con Google).
+# Configurá en GitHub → Settings → Secrets and variables → Actions:
+#   APP_URL      (ej.: https://turnos.tudominio.com.ar)
+#   CRON_SECRET  (el mismo valor que en Vercel)
+name: Tareas programadas
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Llamar a /api/cron
+        run: |
+          curl -fsS -X POST "${{ secrets.APP_URL }}/api/cron" -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --max-time 60

@@ -26,7 +26,7 @@ export const settings = pgTable("settings", {
   whatsappContact: text("whatsapp_contact"),
   contactEmail: text("contact_email"),
   attentionInfo: text("attention_info"),
-  primaryColor: text("primary_color").notNull().default("#5b7f6e"),
+  primaryColor: text("primary_color").notNull().default("#4a6b5c"),
   accentColor: text("accent_color").notNull().default("#c98b6b"),
   timezone: text("timezone").notNull().default("America/Argentina/Buenos_Aires"),
   // Reglas de agenda

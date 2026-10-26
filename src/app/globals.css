@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: var(--brand, #4a6b5c);
+  --color-on-brand: var(--on-brand, #ffffff);
+  --color-accent: var(--accent, #c98b6b);
+  --color-ink: #2a2723;
+  --color-muted: #625b53;
+  --color-line: #e7e1d8;
+  --color-paper: #faf8f5;
+  --color-soft: #f2eee8;
+  --color-danger: #b42318;
+  --color-ok: #2f6b45;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), Georgia, serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 17px;
+  line-height: 1.5;
+}
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-brand) 60%, white);
+  outline-offset: 2px;
+}
+
+@utility btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-semibold transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility btn-primary {
+    @apply btn bg-brand text-on-brand shadow-sm hover:brightness-110;
+}
+
+@utility btn-secondary {
+    @apply btn border border-line bg-white text-ink hover:bg-soft;
+}
+
+@utility btn-ghost {
+    @apply btn text-brand hover:bg-soft;
+}
+
+@utility btn-danger {
+    @apply btn bg-danger text-white hover:brightness-110;
+}
+
+@utility card {
+    @apply rounded-3xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] sm:p-6;
+}
+
+@utility label {
+    @apply mb-1.5 block text-[15px] font-semibold text-ink;
+}
+
+@utility input {
+    @apply block min-h-12 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-base text-ink placeholder:text-[#9a938a] focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none;
+}
+
+@utility input-error {
+    @apply border-danger;
+}
+
+@utility field-error {
+    @apply mt-1.5 text-sm font-medium text-danger;
+}
+
+@utility hint {
+    @apply mt-1 text-sm text-muted;
+}
+
+@utility alert {
+    @apply rounded-2xl border px-4 py-3 text-[15px];
+}
+
+@utility alert-error {
+    @apply alert border-danger/30 bg-[#fdf1ef] text-danger;
+}
+
+@utility alert-ok {
+    @apply alert border-ok/30 bg-[#eff7f1] text-ok;
+}
+
+@utility alert-info {
+    @apply alert border-line bg-soft text-ink;
+}

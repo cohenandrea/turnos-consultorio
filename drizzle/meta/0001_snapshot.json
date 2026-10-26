@@ -1,6 +1,6 @@
 {
-  "id": "03a55d6b-4e9b-4d1e-9787-bde7c529920a",
-  "prevId": "fd3a65f1-8c40-4159-9857-8e8323485bfa",
+  "id": "7dd1fa26-5bda-4c30-b9b9-f1ace4cc77cd",
+  "prevId": "82e45942-4cae-4022-87bb-0832a6cfdaaa",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1603,7 +1603,7 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "'#5b7f6e'"
+          "default": "'#4a6b5c'"
         },
         "accent_color": {
           "name": "accent_color",
