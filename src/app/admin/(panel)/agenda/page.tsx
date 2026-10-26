@@ -88,6 +88,9 @@ export default async function Agenda({ searchParams }: { searchParams: Promise<R
           {num("cancelLimitHours", "Cancelar online hasta (horas antes)", s.cancelLimitHours)}
           {num("rescheduleLimitHours", "Reprogramar online hasta (horas antes)", s.rescheduleLimitHours)}
           {num("maxActivePerPatient", "Turnos futuros por paciente", s.maxActivePerPatient, "0 = sin límite")}
+          <F label="Dar turnos a partir del" hint="Vacío = desde ya. Los días a futuro se cuentan desde esta fecha.">
+            <input className="input" type="date" name="bookingStartDate" defaultValue={s.bookingStartDate ?? ""} />
+          </F>
           <div className="flex items-end"><SubmitButton className="btn-primary w-full">Guardar reglas</SubmitButton></div>
         </form>
       </Section>

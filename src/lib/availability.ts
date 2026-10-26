@@ -30,6 +30,8 @@ export type EngineInput = {
   slotIntervalMinutes: number;
   minNoticeHours: number;
   maxAdvanceDays: number;
+  /** Fecha desde la que se empiezan a dar turnos (epoch ms); el horizonte se cuenta desde ahí. */
+  opensAt?: number | null;
   locationIds: number[];
   coverage?: CoverageConstraint | null;
 };
@@ -136,8 +138,9 @@ export function computeSlots(input: EngineInput): Slot[] {
   const step = Math.max(5, input.slotIntervalMinutes) * MIN;
   const dur = durationMinutes * MIN;
   const buf = bufferMinutes * MIN;
-  const earliest = Math.max(input.from, earliestBookable(input.now, input.minNoticeHours));
-  const latest = Math.min(input.to, bookingHorizon(input.now, tz, input.maxAdvanceDays));
+  const opens = input.opensAt ?? 0;
+  const earliest = Math.max(input.from, earliestBookable(input.now, input.minNoticeHours), opens);
+  const latest = Math.min(input.to, bookingHorizon(Math.max(input.now, opens), tz, input.maxAdvanceDays));
   if (latest <= earliest) return [];
 
   const locs = input.coverage?.allowedLocationIds.length

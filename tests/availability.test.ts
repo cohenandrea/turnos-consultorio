@@ -55,6 +55,14 @@ describe("motor de disponibilidad", () => {
     expect(t[0]).toBe("12:30");
   });
 
+  it("no ofrece turnos antes de la fecha de inicio y cuenta el máximo desde ahí", () => {
+    const opensAt = d("2026-11-04T00:00");
+    const range = { from: d("2026-11-01T00:00"), to: d("2026-11-30T00:00") };
+    const slots = computeSlots(base({ ...range, opensAt, maxAdvanceDays: 3 }));
+    const days = [...new Set(slots.map((s) => DateTime.fromMillis(s.start, { zone: TZ }).toISODate()))];
+    expect(days).toEqual(["2026-11-04", "2026-11-05", "2026-11-06"]);
+  });
+
   it("respeta el máximo de días a futuro", () => {
     const slots = computeSlots(base({ now: d("2026-10-01T08:00"), maxAdvanceDays: 10 }));
     expect(slots).toHaveLength(0);

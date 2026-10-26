@@ -2,6 +2,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { consultationTypes, coverages, locations, settings, scheduleRules, type Coverage, type ConsultationType } from "@/db/schema";
 import { AppError } from "@/lib/errors";
+import { DateTime } from "luxon";
 import { WEEKDAYS } from "@/lib/time";
 
 export async function getSettings() {
@@ -74,6 +75,10 @@ export async function getPublicConfig() {
     timezone: s.timezone,
     waitlistEnabled: s.waitlistEnabled,
     cancelLimitHours: s.cancelLimitHours,
+    opensLabel:
+      s.bookingStartDate && DateTime.fromISO(s.bookingStartDate, { zone: s.timezone }) > DateTime.now()
+        ? DateTime.fromISO(s.bookingStartDate, { zone: s.timezone }).setLocale("es-AR").toFormat("d 'de' LLLL 'de' yyyy")
+        : null,
     prescription: s.prescriptionUrl ? { url: s.prescriptionUrl, note: s.prescriptionNote } : null,
     locations: locs.map((l) => ({ id: l.id, name: l.name, address: l.address, mapsUrl: l.mapsUrl, notes: l.notes, hours: hoursFor(l.id) })),
     coverages: covs.map((c) => ({

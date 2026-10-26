@@ -218,6 +218,7 @@ export function BookingWizard({
               {coverage.name} · {type.name}
             </p>
           </div>
+          {config.opensLabel && <p className="alert-info">Los turnos se dan a partir del {config.opensLabel}.</p>}
           {slotNotice && (
             <div className="alert-error" role="alert">
               {slotNotice}

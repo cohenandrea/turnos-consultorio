@@ -73,6 +73,7 @@ export async function saveBookingRules(f: FormData) {
         cancelLimitHours: intIn(num(f, "cancelLimitHours"), 0, 720, "Límite para cancelar"),
         rescheduleLimitHours: intIn(num(f, "rescheduleLimitHours"), 0, 720, "Límite para reprogramar"),
         maxActivePerPatient: intIn(num(f, "maxActivePerPatient"), 0, 10, "Turnos activos por paciente"),
+        bookingStartDate: /^\d{4}-\d{2}-\d{2}$/.test(str(f, "bookingStartDate")) ? str(f, "bookingStartDate") : null,
         updatedAt: new Date(),
       })
       .where(eq(settings.id, 1));

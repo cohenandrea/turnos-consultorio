@@ -1,7 +1,7 @@
 import { and, eq, gt, lt, ne } from "drizzle-orm";
 import { DateTime } from "luxon";
 import { db } from "@/db";
-import { appointments, scheduleExceptions } from "@/db/schema";
+import { appointments, scheduleExceptions, type Settings } from "@/db/schema";
 import { bookingHorizon, computeSlots, pickSuggestions, type Slot } from "@/lib/availability";
 import { getGoogleBusy } from "@/lib/google/sync";
 import { formatDateLongCap, formatTime, localDateKey } from "@/lib/time";
@@ -18,6 +18,13 @@ export type SlotQuery = {
   ignoreNotice?: boolean;
 };
 
+/** Primer instante en que se dan turnos y límite a futuro, según la configuración. */
+export function bookingWindow(s: Settings, now = Date.now(), admin = false) {
+  const opensAt = !admin && s.bookingStartDate ? DateTime.fromISO(s.bookingStartDate, { zone: s.timezone }).startOf("day").toMillis() : null;
+  const opensFuture = opensAt && opensAt > now ? opensAt : null;
+  return { opensAt: opensFuture, horizon: bookingHorizon(Math.max(now, opensFuture ?? 0), s.timezone, s.maxAdvanceDays) };
+}
+
 export async function findSlots(q: SlotQuery) {
   const [s, { coverage, type }, locs, rules] = await Promise.all([
     getSettings(),
@@ -27,7 +34,8 @@ export async function findSlots(q: SlotQuery) {
   ]);
   const now = Date.now();
   const from = Math.max(q.from ?? now, now);
-  const to = Math.min(q.to ?? bookingHorizon(now, s.timezone, s.maxAdvanceDays), bookingHorizon(now, s.timezone, s.maxAdvanceDays));
+  const win = bookingWindow(s, now, q.ignoreNotice);
+  const to = Math.min(q.to ?? win.horizon, win.horizon);
   if (to <= from) return { slots: [] as Slot[], googleOk: true, tz: s.timezone, settings: s };
 
   const margin = 24 * 3600_000;
@@ -63,6 +71,7 @@ export async function findSlots(q: SlotQuery) {
     slotIntervalMinutes: s.slotIntervalMinutes,
     minNoticeHours: q.ignoreNotice ? 0 : s.minNoticeHours,
     maxAdvanceDays: s.maxAdvanceDays,
+    opensAt: win.opensAt,
     locationIds: locs.map((l) => l.id),
     coverage,
   });
@@ -73,8 +82,8 @@ export async function findSlots(q: SlotQuery) {
 export async function suggestSlots(q: Omit<SlotQuery, "from" | "to">, count = 3) {
   const s = await getSettings();
   const now = Date.now();
-  const horizon = bookingHorizon(now, s.timezone, s.maxAdvanceDays);
-  let from = now;
+  const { horizon, opensAt } = bookingWindow(s, now);
+  let from = Math.max(now, opensAt ?? 0);
   const all: Slot[] = [];
   let googleOk = true;
   while (from < horizon) {

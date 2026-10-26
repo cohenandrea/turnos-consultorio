@@ -43,6 +43,11 @@ export default async function Home() {
             </Link>
           </div>
 
+          {c.opensLabel && (
+            <p className="mx-auto mt-4 max-w-md rounded-2xl bg-white/80 px-4 py-2.5 text-[15px] font-bold text-accent">
+              Turnos disponibles a partir del {c.opensLabel}
+            </p>
+          )}
           <ul className="mx-auto mt-6 flex max-w-md flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-semibold text-muted">
             {["Confirmación inmediata", "Recordatorios automáticos", "Cambios online"].map((t) => (
               <li key={t} className="flex items-center gap-1.5">

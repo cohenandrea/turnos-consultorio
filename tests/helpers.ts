@@ -21,7 +21,7 @@ export async function resetDb() {
     INSERT INTO consultation_types (id, slug, name, duration_minutes, sort_order) VALUES
       (1, 'primera-vez', 'Primera consulta', 40, 0), (2, 'control', 'Control', 30, 1);
     SELECT setval(pg_get_serial_sequence('consultation_types', 'id'), 2);
-    UPDATE settings SET slot_interval_minutes = 30;`);
+    UPDATE settings SET slot_interval_minutes = 30, booking_start_date = NULL;`);
   await fx.end();
 }
 

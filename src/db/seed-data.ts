@@ -12,6 +12,7 @@ export const seedSettings = {
   primaryColor: "#B5536B",
   accentColor: "#7A2E45",
   slotIntervalMinutes: 15,
+  bookingStartDate: "2027-01-01",
   dataControllerName: "Dra. Andrea Cohen",
   prescriptionUrl: "https://app.rcta.me/patients/a9cde68b831e58bd4e41961e2143aadb3e74b9a1",
   prescriptionNote: "Para poder recibir recetas y órdenes electrónicas de la Dra. Cohen es necesario completar este formulario.",

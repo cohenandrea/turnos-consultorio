@@ -35,6 +35,7 @@ export const settings = pgTable("settings", {
   minNoticeHours: integer("min_notice_hours").notNull().default(12),
   maxAdvanceDays: integer("max_advance_days").notNull().default(60),
   maxActivePerPatient: integer("max_active_per_patient").notNull().default(1),
+  bookingStartDate: date("booking_start_date", { mode: "string" }), // no se ofrecen turnos antes de esta fecha
   // Políticas de cancelación / reprogramación
   cancelLimitHours: integer("cancel_limit_hours").notNull().default(24),
   rescheduleLimitHours: integer("reschedule_limit_hours").notNull().default(24),

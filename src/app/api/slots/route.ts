@@ -1,9 +1,8 @@
 import { DateTime } from "luxon";
 import { handle } from "@/lib/http";
 import { AppError } from "@/lib/errors";
-import { bookingHorizon } from "@/lib/availability";
 import { findByToken } from "@/lib/services/booking";
-import { findSlots, serializeSlot, suggestSlots } from "@/lib/services/availability-service";
+import { bookingWindow, findSlots, serializeSlot, suggestSlots } from "@/lib/services/availability-service";
 import { getActiveLocations, getSettings } from "@/lib/services/config";
 
 export const dynamic = "force-dynamic";
@@ -26,9 +25,10 @@ export async function GET(req: Request) {
     const [s, locs] = await Promise.all([getSettings(), getActiveLocations()]);
     const names = new Map(locs.map((l) => [l.id, locs.length > 1 ? l.name : ""]));
     const now = Date.now();
+    const win = bookingWindow(s, now);
     const range = {
-      minMonth: DateTime.fromMillis(now, { zone: s.timezone }).toFormat("yyyy-MM"),
-      maxMonth: DateTime.fromMillis(bookingHorizon(now, s.timezone, s.maxAdvanceDays) - 1, { zone: s.timezone }).toFormat("yyyy-MM"),
+      minMonth: DateTime.fromMillis(Math.max(now, win.opensAt ?? 0), { zone: s.timezone }).toFormat("yyyy-MM"),
+      maxMonth: DateTime.fromMillis(win.horizon - 1, { zone: s.timezone }).toFormat("yyyy-MM"),
     };
     if (p.get("mode") === "month") {
       const month = DateTime.fromFormat(p.get("month") ?? "", "yyyy-MM", { zone: s.timezone });
