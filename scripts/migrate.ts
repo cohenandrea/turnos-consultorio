@@ -46,8 +46,7 @@ async function seed(db: ReturnType<typeof drizzle<typeof schema>>) {
 if (process.argv[1]?.endsWith("migrate.ts")) {
   const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
   if (!url) {
-    if (process.env.VERCEL) throw new Error("Falta DATABASE_URL en las variables de entorno de Vercel");
-    console.warn("⚠ DATABASE_URL no definida: se omiten las migraciones");
+    console.warn("⚠ DATABASE_URL no definida: se omiten las migraciones. Conectá la base de datos y volvé a publicar.");
     process.exit(0);
   }
   runMigrations(url, { seed: true })
